@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\src\bulkcraft\Main.cpp" />
+    <ClCompile Include="..\src\BulkCraft\stdafx.cpp" />
+    <ClCompile Include="..\src\BulkCraft\workers\BaseInkWidgetController.cpp">
+      <Filter>GameWorkers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bulkcraft\workers\CraftingController.cpp">
+      <Filter>GameWorkers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\BulkCraft\stdafx.hpp" />
+    <ClInclude Include="..\src\BulkCraft\workers\BaseInkWidgetController.hpp">
+      <Filter>GameWorkers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bulkcraft\workers\CraftingController.hpp">
+      <Filter>GameWorkers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameWorkers">
+      <UniqueIdentifier>{171e5b52-cf4a-4374-b1a1-964bf111ef13}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
