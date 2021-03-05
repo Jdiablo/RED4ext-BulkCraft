@@ -1,22 +1,17 @@
 #include "workers/BaseInkWidgetController.hpp"
 
-class CraftingController : CyberEyeTracking::Workers::BaseInkWidgetController
+class CraftingController
 {
 private:
-    RED4ext::CProperty* _craftingRootProp;
-    RED4ext::CProperty* _buttonHintsControllerProp;
-    RED4ext::CClassFunction* _addButtonHint;
-    RED4ext::CClassFunction* _isVisibleF;
-    RED4ext::CClassFunction* _onQuantityPickerPopupClosedF;
-
-    bool _hintAdded = false;
-    bool _quantityPickerShow = false;
-    bool AddHintButton();
-    bool IsVisible();
+    RED4ext::GameInstance* _gameInstance;
+    RED4ext::CRTTISystem* _rtti;
+    RED4ext::CClassFunction* _openPicker;
+    RED4ext::Handle<RED4ext::IScriptable> _playerInstance;
+    RED4ext::Handle<RED4ext::IScriptable> _allBlackboardDef;
     void OpenQuantityPicker();
 public:
-    CraftingController() : BaseInkWidgetController("CraftingMainGameController"){};
+    CraftingController() = default;
     ~CraftingController() = default;
-    void Init();
+    void Init(RED4ext::CRTTISystem* rtti, RED4ext::GameInstance* gameInstance);
     void Work();
 };

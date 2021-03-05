@@ -3,18 +3,12 @@
   <ItemGroup>
     <ClCompile Include="..\src\bulkcraft\Main.cpp" />
     <ClCompile Include="..\src\BulkCraft\stdafx.cpp" />
-    <ClCompile Include="..\src\BulkCraft\workers\BaseInkWidgetController.cpp">
-      <Filter>GameWorkers</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\bulkcraft\workers\CraftingController.cpp">
       <Filter>GameWorkers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\BulkCraft\stdafx.hpp" />
-    <ClInclude Include="..\src\BulkCraft\workers\BaseInkWidgetController.hpp">
-      <Filter>GameWorkers</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\bulkcraft\workers\CraftingController.hpp">
       <Filter>GameWorkers</Filter>
     </ClInclude>

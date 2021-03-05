@@ -80,7 +80,8 @@ RED4EXT_EXPORT void OnUpdate()
     if (!initialized && (now - timeStart) >= 5s)
     {
         initialized = true;
-        _craftingWorker.Init();
+        
+        _craftingWorker.Init(rtti, gameInstance);
     }
     if (!initialized)
         return;
