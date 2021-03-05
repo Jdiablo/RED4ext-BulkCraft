@@ -16,6 +16,7 @@ private final func SetupBB() -> Void {
 	};
 
 	this.m_craftingDef.m_CraftingController = this;
+	this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
 }
 
 @replaceMethod(CraftingMainGameController)
@@ -25,19 +26,30 @@ private final func RemoveBB() -> Void {
     };
 	this.m_craftingDef.m_CraftingController = null;
     this.m_craftingBlackboard = null;
-  }
+}
   
 @replaceMethod(CraftingMainGameController)
-private final func OpenCraftingMode() -> Void {
-    this.ChangeMode(CraftingMode.craft);
-    inkWidgetRef.SetVisible(this.m_craftingRoot, false);
-    inkWidgetRef.SetVisible(this.m_upgradingRoot, false);
-    this.SetupRecipesList();
-    this.SetIngredientList();
-    this.SetCraftingButton();
-	
-	this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
-  }
+private final func ChangeMode(mode: CraftingMode) -> Void {
+	this.m_mode = mode;
+	this.SetFilters(false);
+	if Equals(this.m_mode, CraftingMode.craft) {
+		inkWidgetRef.SetVisible(this.m_filterRoot_Crafting, true);
+		inkWidgetRef.SetVisible(this.m_filterRoot_Upgrading, false);
+		inkWidgetRef.RegisterToCallback(this.m_sortingButton_Crafting, n"OnRelease", this, n"OnSortingButtonClicked");
+		inkWidgetRef.UnregisterFromCallback(this.m_sortingButton_Upgrading, n"OnRelease", this, n"OnSortingButtonClicked");
+		inkWidgetRef.SetVisible(this.m_sortingDropdown_Crafting, true);
+		inkWidgetRef.SetVisible(this.m_sortingDropdown_Upgrading, false);
+		this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
+	} else {
+		inkWidgetRef.SetVisible(this.m_filterRoot_Crafting, false);
+		inkWidgetRef.SetVisible(this.m_filterRoot_Upgrading, true);
+		inkWidgetRef.UnregisterFromCallback(this.m_sortingButton_Crafting, n"OnRelease", this, n"OnSortingButtonClicked");
+		inkWidgetRef.RegisterToCallback(this.m_sortingButton_Upgrading, n"OnRelease", this, n"OnSortingButtonClicked");
+		inkWidgetRef.SetVisible(this.m_sortingDropdown_Crafting, false);
+		inkWidgetRef.SetVisible(this.m_sortingDropdown_Upgrading, true);
+		this.m_buttonHintsController.RemoveButtonHint(n"disassemble_item");
+	};
+}
 
 @replaceMethod(CraftingSystem)
 private final func CraftItem(target: wref<GameObject>, itemRecord: ref<Item_Record>, amount: Int32) -> wref<gameItemData> {
@@ -146,7 +158,7 @@ public final const func MaxCraftableQuantity(itemRecord: ref<Item_Record>) -> In
 
 @addMethod(CraftingMainGameController)
 private final func OpenQuantityPicker() -> Void {
-	if (!inkWidgetRef.IsVisible(this.m_craftingRoot) || this.m_quantityPickerPopupToken != null) {
+	if (!inkWidgetRef.IsVisible(this.m_craftingRoot)) {
 		return;
 	}
 	this.m_quantityPickerPopupToken = null;

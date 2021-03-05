@@ -14,10 +14,6 @@ void CraftingController::OpenQuantityPicker()
     try
     {
         RED4ext::Handle<RED4ext::IScriptable> player;
-        auto uiCraftingDefcls = _rtti->GetClass("UI_CraftingDef");
-
-        std::vector<RED4ext::CStackType> args;
-        args.emplace_back(nullptr, &_gameInstance);
 
         if (_allBlackboardDef.GetPtr() == nullptr)
             RED4ext::ExecuteGlobalFunction("GetAllBlackboardDefs", &_allBlackboardDef, {});
@@ -31,7 +27,8 @@ void CraftingController::OpenQuantityPicker()
             ->GetValue<RED4ext::Handle<RED4ext::IScriptable>>(_allBlackboardDef);
 
         RED4ext::WeakHandle<RED4ext::IScriptable> craftingCtrlr =
-          uiCraftingDefcls->GetProperty("CraftingController")
+          _rtti->GetClass("UI_CraftingDef")
+            ->GetProperty("CraftingController")
             ->GetValue<RED4ext::WeakHandle<RED4ext::IScriptable>>(uiCrafting);
 
         if (!craftingCtrlr.GetUseCount())

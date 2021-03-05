@@ -1,5 +1,3 @@
-#include "workers/BaseInkWidgetController.hpp"
-
 class CraftingController
 {
 private:
