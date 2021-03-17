@@ -39,10 +39,12 @@ protected cb func OnRecipeSelect(previous: ref<inkVirtualCompoundItemController>
     };
     craftableController.SelectSlot(true);
     this.UpdateItemPreview(craftableController, true);
-	if Equals(this.m_dryInventoryItemData.CategoryName, "Weapon") || Equals(this.m_dryInventoryItemData.CategoryName, "Clothing") {
-		this.m_buttonHintsController.RemoveButtonHint(n"disassemble_item");
-	} else {
-		this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
+	if Equals(this.m_mode, CraftingMode.craft) {
+		if Equals(this.m_dryInventoryItemData.CategoryName, "Weapon") || Equals(this.m_dryInventoryItemData.CategoryName, "Clothing") {
+			this.m_buttonHintsController.RemoveButtonHint(n"disassemble_item");
+		} else {
+			this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
+		};
 	};
   }
 
@@ -68,8 +70,8 @@ private final func ChangeMode(mode: CraftingMode) -> Void {
 	};
 }
 
-@replaceMethod(CraftingSystem)
-private final func CraftItem(target: wref<GameObject>, itemRecord: ref<Item_Record>, amount: Int32) -> wref<gameItemData> {
+@addMethod(CraftingSystem)
+private final func CraftFewItems(target: wref<GameObject>, itemRecord: ref<Item_Record>, amount: Int32) -> wref<gameItemData> {
     let ingredientRecords: array<wref<RecipeElement_Record>>;
     let requiredIngredients: array<IngredientData>;
     let tempStat: Float;
@@ -217,7 +219,7 @@ protected cb func OnQuantityPickerPopupClosed(data: ref<inkGameNotificationData>
 	request.target = this.m_player;
 	request.itemRecord = this.m_selectedRecipe_id;
 	request.amount = quantityData.choosenQuantity;
-	this.m_craftingSystem.QueueRequest(request);
+	this.m_craftingSystem.CraftFewItems(this.m_player, this.m_selectedRecipe_id, quantityData.choosenQuantity);
 	
     return true;
 }
