@@ -29,6 +29,24 @@ private final func RemoveBB() -> Void {
 }
   
 @replaceMethod(CraftingMainGameController)
+protected cb func OnRecipeSelect(previous: ref<inkVirtualCompoundItemController>, next: ref<inkVirtualCompoundItemController>) -> Bool {
+    let craftableController: ref<CraftableItemLogicController>;
+    let previousCraftableController: ref<CraftableItemLogicController>;
+    craftableController = (next as CraftableItemLogicController);
+    previousCraftableController = (previous as CraftableItemLogicController);
+    if NotEquals(previousCraftableController, null) {
+      previousCraftableController.SelectSlot(false);
+    };
+    craftableController.SelectSlot(true);
+    this.UpdateItemPreview(craftableController, true);
+	if Equals(this.m_dryInventoryItemData.CategoryName, "Weapon") || Equals(this.m_dryInventoryItemData.CategoryName, "Clothing") {
+		this.m_buttonHintsController.RemoveButtonHint(n"disassemble_item");
+	} else {
+		this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
+	};
+  }
+
+@replaceMethod(CraftingMainGameController)  
 private final func ChangeMode(mode: CraftingMode) -> Void {
 	this.m_mode = mode;
 	this.SetFilters(false);
@@ -39,7 +57,6 @@ private final func ChangeMode(mode: CraftingMode) -> Void {
 		inkWidgetRef.UnregisterFromCallback(this.m_sortingButton_Upgrading, n"OnRelease", this, n"OnSortingButtonClicked");
 		inkWidgetRef.SetVisible(this.m_sortingDropdown_Crafting, true);
 		inkWidgetRef.SetVisible(this.m_sortingDropdown_Upgrading, false);
-		this.m_buttonHintsController.AddButtonHint(n"disassemble_item", "Bulk craft");
 	} else {
 		inkWidgetRef.SetVisible(this.m_filterRoot_Crafting, false);
 		inkWidgetRef.SetVisible(this.m_filterRoot_Upgrading, true);
@@ -158,9 +175,9 @@ public final const func MaxCraftableQuantity(itemRecord: ref<Item_Record>) -> In
 
 @addMethod(CraftingMainGameController)
 private final func OpenQuantityPicker() -> Void {
-	if (!inkWidgetRef.IsVisible(this.m_craftingRoot)) {
+	if !inkWidgetRef.IsVisible(this.m_craftingRoot) || Equals(this.m_dryInventoryItemData.CategoryName, "Weapon") || Equals(this.m_dryInventoryItemData.CategoryName, "Clothing") {
 		return;
-	}
+	};
 	this.m_quantityPickerPopupToken = null;
 	this.m_selectedRecipe_id = this.m_selectedRecipe.id;
     let data: ref<QuantityPickerPopupData>;
